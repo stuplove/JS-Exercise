@@ -1,0 +1,19 @@
+{
+  "name": "js-xlsx",
+  "version": "1.0.0",
+  "description": "###",
+  "main": "index.js",
+  "bin": {
+    "js-xlsx": "app.js"
+  },
+  "scripts": {
+    "start": "node ./bin/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "co": "^4.6.0",
+    "xlsx": "^0.8.0"
+  }
+}
