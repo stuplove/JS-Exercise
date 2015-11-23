@@ -2,4 +2,5 @@
 
 1. [Jquery Pagination 分頁套件練習](https://github.com/stuplove/JS-Exercise/tree/master/JqueryPaginationEx)
 2. [圖片輪播](https://github.com/stuplove/JS-Exercise/tree/master/image-carousel)
-3. [json-to-xlsx](https://github.com/stuplove/JS-Exercise/tree/master/js-xlsx)
+3. [json-to-xlsx](https://github.com/stuplove/JS-Exercise/tree/master/js-xlsx_readJsonToXlsx)
+3. [xlsx-to-json](https://github.com/stuplove/JS-Exercise/tree/master/js-xlsx_readXlsxToJson)
