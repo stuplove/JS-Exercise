@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>simplePagination.js 練習</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+</head>
+
+<body>
+    <div style="text-align: center;">
+        <span>page</span>
+        <input id="page" type="number" value='1'  />
+        <br/>
+        <span>total</span>
+        <input id="total" type="number" value='100'/>
+        <br/>
+    </div>
+    <div style="text-align: center;">
+        <ul id='test' class=""></ul>
+    </div>
+    <form action="#" method="post" id="formId">
+        <input id="pageId" type="hidden" name="page" />
+    </form>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://flaviusmatis.github.io/simplePagination.js/jquery.simplePagination.js"></script>
+    <script type="text/javascript" src="test.js"></script>
+
+</body>
+
+</html>
