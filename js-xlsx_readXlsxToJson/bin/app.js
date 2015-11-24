@@ -1,76 +1,81 @@
 var fs = require('fs');
 var co = require('co');
 var XLSX = require('xlsx');
+var jsonfile = require('jsonfile')
 
-try {
-    var saveBase = __dirname + '/../build/',
-        fileName = 'out.json',
-        saveXlsxPath = saveBase + fileName;
+co(function*() {
+    try {
+        var saveJsPath = __dirname + '/../build/out.js',
+            savePHPPath = __dirname + '/../build/out.php',
+            saveJsonPath = __dirname + '/../build/out.json',
+            sourceFile = __dirname + '/temp.xlsx';
 
-    var workbook = yield XLSX.readFile(__dirname + '/temp.xlsx'),
-        sheet_name_list = workbook.SheetNames;
+        var workbook = yield XLSX.readFile(sourceFile),
+            sheet_name_list = workbook.SheetNames;
 
-    var json = {};
+        var worksheet = workbook.Sheets[sheet_name_list[0]],
+            json = XLSX.utils.sheet_to_json(worksheet, {
+                // header: 'A1'
+                raw: true
+            });
 
-    sheet_name_list.forEach(function(y) {
-        var worksheet = workbook.Sheets[y];
-        for (z in worksheet) {
-            if (z[0] === '!') continue;
-            console.log(typeof z)
-            // z.indexOf("oo") > -1
-            return
+        console.log('read xlsx json= ', json)
+        saveJS(saveJsPath, json)
+        savePHP(savePHPPath, json)
+        saveJsonFile(saveJsonPath, json)
 
-            // var value = worksheet[z].v;
-            // if(z.indexof)
-            // console.log(y + "!" + z + "=" + JSON.stringify(worksheet[z].v));
+
+
+        function savePHP(path, json) {
+            var formatJson = format(json),
+                rtn = "<?php $lang = array" + JSON.stringify(formatJson) + " ?>";
+
+            rtn = rtn.replace("{", "(\n");
+            rtn = rtn.replace("}", "\n);");
+            rtn = rtn.replace(/,/g, ",\n");
+            rtn = rtn.replace(/:/g, " => ");
+
+            console.log('read xlsx format rtn= ', rtn)
+
+            fs.writeFile(path, rtn, writeFileCb)
         }
-    });
 
-    // fs.exists(saveBase, function(exists) {
-    //     console.log('save path exists=', exists)
-    //     if (!exists)
-    //         fs.mkdir(saveBase, function() {
-    //             co(createXLSX);
-    //         })
-    //     else
-    //         co(createXLSX);
-    // });
+        function saveJS(path, json) {
+            var rtn = format(json)
+
+            rtn = "var _JS_LANG = " + JSON.stringify(rtn);
+
+            console.log('read xlsx format rtn= ', rtn)
+
+            fs.writeFile(path, rtn, writeFileCb)
+        }
+
+        function writeFileCb(err) {
+            if (err) throw err;
+            console.log('It\'s saved!');
+        }
+
+        function saveJsonFile(path, json) {
+            var rtn = format(json)
+
+            console.log('read xlsx format rtn= ', rtn)
+
+            jsonfile.writeFileSync(path, rtn, {
+                spaces: 2
+            })
+        }
+
+        function format(json) {
+            var rtn = {};
+            json.forEach(function(element, index, array) {
+                rtn[element.key] = element.value
+            })
+            return rtn;
+        }
 
 
 
-    function* createXLSX() {
-        console.log('createXLSX')
-            //讀取空 xlsx, 資料表名稱為 '工作表1'
-        var workbook = yield XLSX.readFile(__dirname + '/temp.xlsx');
-        // console.log(Object.getOwnPropertyNames(workbook))
-
-        var sheet_name_list = workbook.SheetNames;
-        console.log('sheet_name_list= ', sheet_name_list)
-        var sheet_name_list = workbook.SheetNames;
-        var worksheet = workbook.Sheets[sheet_name_list[0]];
-
-        var jsonNames = Object.getOwnPropertyNames(json);
-        for (var i = 1; i <= jsonNames.length; i++) {
-            var name = jsonNames[i - 1],
-                val = json[name];
-
-            function format(text) {
-                return {
-                    t: 's',
-                    v: text,
-                    r: '<t>' + text + '</t>',
-                    h: text,
-                    w: text
-                }
-            }
-            worksheet['A' + i] = format(name);
-            worksheet['B' + i] = format(val);
-            worksheet['!ref'] = 'A1:B' + i;
-        };
-
-        XLSX.writeFile(workbook, saveXlsxPath);
+    } catch (e) {
+        console.log(e)
     }
-
-} catch (e) {
-    console.log(e)
-}
+})

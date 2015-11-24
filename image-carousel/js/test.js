@@ -57,7 +57,6 @@
     function selectImgItem() {
         $btn = $(this);
         var fileName = 'img' + $btn.text() + '.jpeg'
-        var path = $img.attr('src');
         $img.attr('src', filePathBase + fileName);
     }
 
